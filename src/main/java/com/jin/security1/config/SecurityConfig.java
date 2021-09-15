@@ -16,13 +16,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http
 		.csrf().disable()
 		.authorizeRequests()
-			.antMatchers("user/**").authenticated()
+			.antMatchers("/user/**").authenticated()
 			.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 			.antMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or haRole('ROLE_MANAGER')")
 			.anyRequest().permitAll()
 			.and()
 		.formLogin()
-			.loginPage("/login");
+			.loginPage("/loginForm")
+			.loginProcessingUrl("/login")
+			.defaultSuccessUrl("/");
 	}
 	
 	@Bean

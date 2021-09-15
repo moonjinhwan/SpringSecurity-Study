@@ -20,11 +20,11 @@ public class IndexController {
 	private UserRepository userRepository;
 
 	@GetMapping("/")
-	public String index() {
-		return "index";
+	public @ResponseBody String index() {
+		return "인덱스 페이지";
 	}
 
-	@GetMapping("/login")
+	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/loginForm";
 	}
