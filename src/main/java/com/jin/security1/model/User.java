@@ -24,4 +24,7 @@ public class User {
 	private String role;
 	@CreationTimestamp
 	private Timestamp createTime;
+	private String provider;//구글
+	private String providerId;//구글아이디
+	
 }
