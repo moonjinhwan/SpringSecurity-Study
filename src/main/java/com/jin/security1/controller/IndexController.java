@@ -1,6 +1,8 @@
 package com.jin.security1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,10 +51,22 @@ public class IndexController {
 		System.out.println(user);
 		user.setRole("ROLE_USER");
 		user.setEmail(user.getEmail());
-		String rawPassword= user.getPassword();
+		String rawPassword = user.getPassword();
 		String encPassword = bCryptPasswordEncoder.encode(rawPassword);
 		user.setPassword(encPassword);
 		userRepository.save(user);
-		return "redirect:/login";
+		return "redirect:/loginForm";
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/info")
+	public @ResponseBody String info() {
+		return "관리자페이지";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+	@GetMapping("/infoManager")
+	public @ResponseBody String managerView() {
+		return "메니저 페이지";
 	}
 }
