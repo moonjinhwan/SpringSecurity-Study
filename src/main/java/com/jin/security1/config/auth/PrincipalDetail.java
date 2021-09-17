@@ -2,18 +2,26 @@
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.jin.security1.model.User;
 
-public class PrincipalDetail implements UserDetails{
+public class PrincipalDetail implements UserDetails, OAuth2User{
 
 	private User user;
+	private Map<String, Object> attributes;
 	
 	public PrincipalDetail(User user) {
 		this.user=user;
+	}
+	
+	public PrincipalDetail(User user, Map<String, Object> attributes) {
+		this.user=user;
+		this.attributes = attributes;
 	}
 	
 	@Override
@@ -63,6 +71,18 @@ public class PrincipalDetail implements UserDetails{
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		// TODO Auto-generated method stub
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

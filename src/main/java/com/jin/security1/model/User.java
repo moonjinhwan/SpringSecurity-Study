@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -26,5 +27,19 @@ public class User {
 	private Timestamp createTime;
 	private String provider;//구글
 	private String providerId;//구글아이디
+	@Builder
+	public User(int id, String username, String password, String email, String role, Timestamp createTime,
+			String provider, String providerId) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.createTime = createTime;
+		this.provider = provider;
+		this.providerId = providerId;
+	}
+	
 	
 }
