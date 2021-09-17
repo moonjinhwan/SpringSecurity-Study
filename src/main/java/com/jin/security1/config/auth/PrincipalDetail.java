@@ -1,4 +1,4 @@
-package com.jin.security1.config.auth;
+ package com.jin.security1.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
