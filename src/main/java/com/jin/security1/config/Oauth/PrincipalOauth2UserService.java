@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.jin.security1.config.Oauth.provider.GoogleInfo;
+import com.jin.security1.config.Oauth.provider.OAuth2UserInfo;
 import com.jin.security1.config.auth.PrincipalDetail;
 import com.jin.security1.model.User;
 import com.jin.security1.repository.UserRepository;
@@ -26,23 +28,22 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 		OAuth2User oauth2User = super.loadUser(userRequest);
 //		System.out.println(super.loadUser(userRequest));
 //		System.out.println(oauth2User);
-		String provider = userRequest.getClientRegistration().getClientId();//google
-		String providerId = oauth2User.getAttribute("sub");
-		String username = provider+"_"+providerId;
-		String password = bCryptPasswordEncoder.encode("jin");
-		String email = oauth2User.getAttribute("email");
-		String role = "USER_ROLE";
-		
-		User userEntity = userRepository.findByUsername(username);
+		OAuth2UserInfo oAuth2UserInfo = null;
+		if(userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+			oAuth2UserInfo = new GoogleInfo(oauth2User.getAttributes());
+		}else {
+			System.out.println("구글만 지원합니다.");
+		}
+		User userEntity = userRepository.findByUsername(oAuth2UserInfo.getName());
 		if(userEntity == null) {
 			System.out.println("최초 회원 입니다.");
 			userEntity = User.builder()
-					.provider(provider)
-					.providerId(providerId)
-					.username(username)
-					.password(password)
-					.email(email)
-					.role(role)
+					.provider(oAuth2UserInfo.getProvider())
+					.providerId(oAuth2UserInfo.getProviderId())
+					.username(oAuth2UserInfo.getProvider() + "_" + oAuth2UserInfo.getProviderId())
+					.password(bCryptPasswordEncoder.encode("jin"))
+					.email(oAuth2UserInfo.getEmail())
+					.role("ROLE_USER")
 					.build();
 			userRepository.save(userEntity);
 			System.out.println(userEntity.toString());
